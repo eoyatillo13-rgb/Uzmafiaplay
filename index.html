@@ -1,3 +1,5 @@
+Ajoyib! O'yinga haqiqiy 3D ikonkalar, ramkalar va rasmli logotiplarni integratsiya qiladigan yangilangan kodni tayyorladim.
+GitHub-dagi index.html faylini ochib, quyidagi kod bilan to'liq almashtiring va Commit changes tugmasini bosing:
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -6,26 +8,24 @@
   <title>Play Mafia - UzMafiaplay</title>
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at top, #1a1c29 0%, #08090d 100%);
-      --card-bg: rgba(21, 22, 31, 0.85);
-      --card-border: #2c2d3c;
-      --accent-gold: #f1c40f;
-      --accent-purple: #7c4dff;
+      --bg-color: #0b0e14;
+      --card-bg: #151a23;
+      --card-border: #222936;
+      --accent-gold: #e5ac40;
+      --accent-purple: #6a44f2;
       --accent-green: #2ecc71;
-      --accent-red: #e74c3c;
       --text-main: #ffffff;
-      --text-sub: #8b8e9b;
+      --text-sub: #7a8290;
     }
 
     body {
-      background: var(--bg-gradient);
+      background-color: var(--bg-color);
       color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
       padding: 15px;
-      min-height: 100vh;
       box-sizing: border-box;
-      text-align: center;
+      user-select: none;
     }
 
     /* Top Logo Header */
@@ -33,123 +33,203 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0 20px 0;
+      gap: 12px;
+      margin: 10px 0 20px 0;
     }
 
-    .logo-circle {
-      width: 65px;
-      height: 65px;
+    .logo-img {
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       border: 2px solid var(--accent-gold);
-      background: radial-gradient(circle, #2a2a3a 0%, #0f0f15 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      box-shadow: 0 0 20px rgba(241, 196, 15, 0.25);
+      box-shadow: 0 0 15px rgba(229, 172, 64, 0.4);
+      object-fit: cover;
     }
 
     .logo-title {
       font-size: 26px;
       font-weight: 900;
-      letter-spacing: 3px;
-      background: linear-gradient(135deg, #f39c12, #f1c40f);
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fce072, #e5ac40);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 4px 15px rgba(241, 196, 15, 0.2);
+      margin: 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
-    /* Action Buttons Row */
+    /* Icon Bar Row */
+    .icon-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0 5px;
+    }
+
+    .icon-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #19202c;
+      border: 1px solid #2a3344;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      cursor: pointer;
+    }
+
+    .icon-btn img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .icon-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #e74c3c;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 5px;
+      border-radius: 10px;
+    }
+
+    /* Main Actions Bar */
     .action-row {
       display: flex;
       gap: 12px;
       margin-bottom: 25px;
     }
 
-    .btn-create {
-      background: #181922;
+    .btn-add {
+      width: 65px;
+      height: 60px;
+      background: linear-gradient(145deg, #2b2112, #18120a);
       border: 2px solid var(--accent-gold);
       border-radius: 18px;
-      width: 65px;
-      height: 58px;
-      font-size: 24px;
       color: var(--accent-gold);
-      cursor: pointer;
+      font-size: 28px;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(241, 196, 15, 0.15);
-      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(229, 172, 64, 0.2);
     }
-
-    .btn-create:active { transform: scale(0.95); }
 
     .btn-quick {
       flex: 1;
-      background: linear-gradient(135deg, #6c5ce7, #4834d4);
+      height: 60px;
+      background: linear-gradient(135deg, #7b52ff, #5022ed);
       border: none;
       border-radius: 18px;
       color: white;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4);
-      transition: all 0.2s ease;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(106, 68, 242, 0.4);
     }
 
-    .btn-quick:active { transform: scale(0.97); }
+    .btn-qr {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(145deg, #2b2112, #18120a);
+      border: 1px solid #3d2f19;
+      border-radius: 18px;
+      color: var(--accent-gold);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
     /* Section Title */
-    .section-header {
-      text-align: left;
-      font-size: 12px;
+    .section-title {
+      font-size: 13px;
       color: var(--text-sub);
       font-weight: 800;
       letter-spacing: 1.5px;
-      margin-bottom: 12px;
       text-transform: uppercase;
+      text-align: left;
+      margin-bottom: 12px;
     }
 
-    /* Room Card Design */
+    /* Room Cards List */
     .room-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 18px;
       padding: 16px;
       margin-bottom: 12px;
-      text-align: left;
-      cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .room-card:hover {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 15px rgba(241, 196, 15, 0.2);
+    .room-info-left {
+      text-align: left;
     }
 
-    .room-title-text {
+    .room-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .badge-pro {
+      background: var(--accent-gold);
+      color: #000;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .room-name {
       font-size: 16px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 4px;
+      font-weight: bold;
+      color: #fff;
     }
 
-    .room-details {
-      font-size: 13px;
+    .room-players-count {
       color: var(--accent-green);
+      font-size: 14px;
+      font-weight: bold;
     }
 
-    /* Seats Grid inside Game Room */
+    .room-users-avatars {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .avatar-mini {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid var(--accent-gold);
+      object-fit: cover;
+    }
+
+    .arrow-right {
+      color: var(--text-sub);
+      font-size: 18px;
+    }
+
+    /* Seats Grid View */
     .seats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -163,19 +243,25 @@
       border-radius: 16px;
       padding: 16px 10px;
       text-align: center;
-      min-height: 80px;
+      min-height: 85px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(5px);
-      transition: all 0.2s ease;
     }
 
     .seat-box.occupied {
       border: 1px solid var(--accent-purple);
-      background: linear-gradient(145deg, rgba(30, 32, 48, 0.9), rgba(18, 19, 28, 0.9));
-      box-shadow: 0 4px 12px rgba(124, 77, 255, 0.15);
+      background: #1c2230;
+    }
+
+    .player-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      margin-bottom: 6px;
+      object-fit: cover;
     }
 
     /* Modals */
@@ -184,14 +270,13 @@
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;
       z-index: 100;
     }
 
     .modal-content {
-      background: #12131a;
+      background: #151a23;
       border: 1px solid var(--card-border);
       padding: 22px;
       border-radius: 24px;
@@ -199,7 +284,6 @@
       max-width: 360px;
       text-align: left;
       box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     input[type="text"], input[type="number"] {
@@ -208,29 +292,15 @@
       margin: 8px 0 16px 0;
       border-radius: 14px;
       border: 1px solid var(--card-border);
-      background: #090a0f;
+      background: #0b0e14;
       color: #fff;
       font-size: 15px;
       box-sizing: border-box;
       outline: none;
-      transition: 0.2s;
-    }
-
-    input[type="text"]:focus, input[type="number"]:focus {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 10px rgba(241, 196, 15, 0.2);
-    }
-
-    .form-label {
-      font-size: 11px;
-      color: var(--text-sub);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .btn-main {
-      background: linear-gradient(135deg, var(--accent-purple), #4834d4);
+      background: linear-gradient(135deg, var(--accent-purple), #5022ed);
       color: white;
       font-weight: bold;
       width: 100%;
@@ -240,7 +310,6 @@
       cursor: pointer;
       font-size: 16px;
       margin-top: 10px;
-      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
     }
   </style>
 </head>
@@ -249,64 +318,65 @@
   <!-- Asosiy Bosh Sahifa -->
   <div id="home-view">
     <div class="top-header">
-      <div class="logo-circle">🕵️‍♂️</div>
+      <img src="https://api.iconify.design/emojione-v1:detective.svg" class="logo-img" alt="Logo">
       <div class="logo-title">PLAY MAFIA</div>
     </div>
 
-    <div class="action-row">
-      <button class="btn-create" id="open-create-modal" title="Xona ochish">➕</button>
-      <button class="btn-quick" id="quick-join-btn">⚡ Tezkor qo'shilish</button>
+    <!-- Ikonkalar paneli -->
+    <div class="icon-row">
+      <div class="icon-btn" title="Reyting"><img src="https://api.iconify.design/noto:sun.svg" alt="Sun"></div>
+      <div class="icon-btn" title="Tarix"><img src="https://api.iconify.design/noto:hourglass-not-done.svg" alt="History"></div>
+      <div class="icon-btn" title="Qoidalar"><img src="https://api.iconify.design/noto:closed-book.svg" alt="Rules"></div>
+      <div class="icon-btn" title="Yutuqlar"><img src="https://api.iconify.design/noto:trophy.svg" alt="Trophy"></div>
+      <div class="icon-btn" title="Choyxona"><img src="https://api.iconify.design/noto:tent.svg" alt="Tent"><span class="icon-badge">1</span></div>
+      <div class="icon-btn" title="Profil"><img src="https://api.iconify.design/noto:crown.svg" alt="Crown"></div>
     </div>
 
-    <div class="section-header">Ochiq xonalar</div>
+    <!-- Amal tugmalari -->
+    <div class="action-row">
+      <button class="btn-add" id="open-create-modal">┼</button>
+      <button class="btn-quick" id="quick-join-btn">⚡ Tezkor qo'shilish</button>
+      <button class="btn-qr" id="qr-btn">⚏</button>
+    </div>
+
+    <div class="section-title">Ochiq xonalar</div>
     <div id="rooms-container">
-      <p style="color: var(--text-sub); font-size: 14px; margin-top: 25px;">Hozircha ochiq xonalar yo'q...</p>
+      <p style="color: var(--text-sub); font-size: 14px; text-align: center; margin-top: 30px;">Hozircha ochiq xonalar yo'q...</p>
     </div>
   </div>
 
-  <!-- O'yin xonasi (O'rindiqlar stoli) -->
+  <!-- O'yin xonasi ko'rinishi -->
   <div id="room-view" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
       <h3 id="room-header-title" style="color: var(--accent-gold); margin: 0;">Xona</h3>
-      <button onclick="location.reload()" style="background: var(--accent-red); border: none; color: white; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer;">Chiqish</button>
+      <button onclick="location.reload()" style="background: #e74c3c; border: none; color: white; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer;">Chiqish</button>
     </div>
 
     <div id="my-role-card" style="font-size: 15px; font-weight: bold; color: var(--accent-green); margin-bottom: 12px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 12px; border-radius: 14px;">Rol kutilmoqda...</div>
     
-    <div class="section-header">O'rindiqlar (O'yinchilar):</div>
+    <div class="section-title">O'rindiqlar:</div>
     <div class="seats-grid" id="seats-container"></div>
 
-    <button id="start-game-btn" class="btn-main" style="display: none; background: linear-gradient(135deg, #2ecc71, #27ae60); box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);">O'yinni boshlash ▶</button>
+    <button id="start-game-btn" class="btn-main" style="display: none; background: linear-gradient(135deg, #2ecc71, #27ae60);">O'yinni boshlash ▶</button>
   </div>
 
-  <!-- Xona Yaratish Modali -->
+  <!-- Modallar -->
   <div class="modal" id="create-modal">
     <div class="modal-content">
       <h3 style="color: var(--accent-gold); margin-top:0;">Yangi xona</h3>
-      
-      <div class="form-label">Ismingiz</div>
-      <input type="text" id="creator-name" placeholder="Ismingizni kiriting...">
-
-      <div class="form-label">Xona nomi (ixtiyoriy)</div>
-      <input type="text" id="room-name-input" placeholder="Masalan: Do'stlar davrasi">
-
-      <div class="form-label">O'yinchilar soni</div>
-      <input type="number" id="max-players-input" value="6" min="3" max="16">
-
+      <input type="text" id="creator-name" placeholder="Ismingiz...">
+      <input type="text" id="room-name-input" placeholder="Xona nomi (masalan: 7-Xona)">
+      <input type="number" id="max-players-input" value="16" min="3" max="16">
       <button class="btn-main" id="confirm-create">Yaratish</button>
       <button onclick="closeAllModals()" style="background:none; border:none; color: var(--text-sub); margin-top:15px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
     </div>
   </div>
 
-  <!-- Xonaga Qo'shilish Modali -->
   <div class="modal" id="join-modal">
     <div class="modal-content">
       <h3 style="color: var(--accent-gold); margin-top:0;">Xonaga qo'shilish</h3>
-      
-      <div class="form-label">Ismingiz</div>
-      <input type="text" id="joiner-name" placeholder="Ismingizni kiriting...">
-
-      <button class="btn-main" id="confirm-quick-join">O'yinga qo'shilish</button>
+      <input type="text" id="joiner-name" placeholder="Ismingiz...">
+      <button class="btn-main" id="confirm-quick-join">Qo'shilish</button>
       <button onclick="closeAllModals()" style="background:none; border:none; color: var(--text-sub); margin-top:15px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
     </div>
   </div>
@@ -361,13 +431,12 @@
       joinModal.style.display = "none";
     };
 
-    // Xona Yaratish
     document.getElementById("confirm-create").onclick = () => {
       const name = document.getElementById("creator-name").value.trim();
-      const roomTitle = document.getElementById("room-name-input").value.trim() || "Do'stlar davrasi";
-      const maxPlayers = parseInt(document.getElementById("max-players-input").value) || 6;
+      const roomTitle = document.getElementById("room-name-input").value.trim() || "Xona";
+      const maxPlayers = parseInt(document.getElementById("max-players-input").value) || 16;
 
-      if (!name) return alert("Iltimos, ismingizni kiriting!");
+      if (!name) return alert("Ismingizni kiriting!");
 
       currentRoomId = Math.floor(1000 + Math.random() * 9000);
       isHost = true;
@@ -388,10 +457,9 @@
       showRoom();
     };
 
-    // Xonaga Qo'shilish
     document.getElementById("confirm-quick-join").onclick = async () => {
       const name = document.getElementById("joiner-name").value.trim();
-      if (!name) return alert("Iltimos, ismingizni kiriting!");
+      if (!name) return alert("Ismingizni kiriting!");
       if (!selectedRoomToJoin) return alert("Xona topilmadi!");
 
       currentRoomId = selectedRoomToJoin;
@@ -422,7 +490,7 @@
         const seatsContainer = document.getElementById("seats-container");
         seatsContainer.innerHTML = "";
 
-        const maxSlots = roomData.maxPlayers || 6;
+        const maxSlots = roomData.maxPlayers || 16;
         const playersList = Object.entries(playersObj);
 
         for (let i = 0; i < maxSlots; i++) {
@@ -433,8 +501,9 @@
             const [pKey, pVal] = playersList[i];
             seat.classList.add("occupied");
             seat.innerHTML = `
+              <img src="https://api.iconify.design/emojione:person-detective.svg" class="player-avatar" alt="Avatar">
               <div style="font-weight:bold; font-size:14px; color:#fff;">${pVal.name}</div>
-              <div style="font-size:11px; color:${pVal.isHost ? 'var(--accent-gold)' : 'var(--accent-green)'}; margin-top:4px;">${pVal.isHost ? '👑 Xona egasi' : 'O‘yinchi'}</div>
+              <div style="font-size:11px; color:${pVal.isHost ? 'var(--accent-gold)' : 'var(--accent-green)'}; margin-top:2px;">${pVal.isHost ? '👑 Xona egasi' : 'O‘yinchi'}</div>
             `;
 
             if (pKey === myPlayerId && pVal.role && pVal.role !== "Kutilmoqda...") {
@@ -442,8 +511,8 @@
             }
           } else {
             seat.innerHTML = `
-              <div style="font-size: 20px; color: #444;">+</div>
-              <div style="font-size: 11px; color: #555; margin-top:2px;">Bo'sh joy</div>
+              <div style="font-size: 20px; color: #555;">+</div>
+              <div style="font-size: 11px; color: #666; margin-top:2px;">Bo'sh joy</div>
             `;
           }
           seatsContainer.appendChild(seat);
@@ -451,13 +520,12 @@
       });
     }
 
-    // Ochiq Xonalar Ro'yxati
     onValue(ref(database, 'rooms'), (snapshot) => {
       const container = document.getElementById("rooms-container");
       container.innerHTML = "";
 
       if (!snapshot.exists()) {
-        container.innerHTML = '<p style="color: var(--text-sub); font-size: 14px; margin-top: 25px;">Hozircha ochiq xonalar yo\'q...</p>';
+        container.innerHTML = '<p style="color: var(--text-sub); font-size: 14px; text-align: center; margin-top: 30px;">Hozircha ochiq xonalar yo\'q...</p>';
         return;
       }
 
@@ -466,14 +534,24 @@
         const rData = child.val();
 
         if (rData.status === "waiting") {
+          const playersCount = rData.players ? Object.keys(rData.players).length : 0;
+          const maxPlayers = rData.maxPlayers || 16;
+          
           const card = document.createElement("div");
           card.className = "room-card";
           card.innerHTML = `
-            <div>
-              <div class="room-title-text">${rData.roomName || 'Xona'}</div>
-              <div class="room-details">Yaratuvchi: ${rData.createdBy} ➔ Kirish</div>
+            <div class="room-info-left">
+              <div class="room-header">
+                <span class="badge-pro">Pro</span>
+                <span class="room-name">${rData.roomName || 'Xona'}</span>
+                <span class="room-players-count">${playersCount}/${maxPlayers}</span>
+              </div>
+              <div class="room-users-avatars">
+                <img src="https://api.iconify.design/emojione:person-detective.svg" class="avatar-mini" alt="User">
+                <span>${rData.createdBy}</span>
+              </div>
             </div>
-            <div style="color: var(--accent-gold); font-size: 14px; font-weight: bold;">O'ynash</div>
+            <div class="arrow-right">❯</div>
           `;
           card.onclick = () => {
             selectedRoomToJoin = rId;
@@ -484,7 +562,6 @@
       });
     });
 
-    // O'yinni Boshlash va Rollarni Tarqatish
     document.getElementById("start-game-btn").onclick = async () => {
       const roomSnap = await get(ref(database, 'rooms/' + currentRoomId));
       if (!roomSnap.exists()) return;
@@ -495,7 +572,7 @@
       const playersObj = roomData.players || {};
       const players = Object.entries(playersObj).map(([key, val]) => ({ key, ...val }));
 
-      if (players.length < 3) return alert("O'yin uchun kamida 3 ta o'yinchi kerak!");
+      if (players.length < 3) return alert("Kamida 3 ta o'yinchi kerak!");
 
       const roles = ["Mafiya", "Doktor", "Izquvar", "Tinch aholi", "Tinch aholi", "Tinch aholi"];
       for (let i = players.length - 1; i > 0; i--) {
@@ -513,3 +590,4 @@
   </script>
 </body>
 </html>
+
