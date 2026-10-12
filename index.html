@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Play Mafia - UzMafiaplay</title>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
       --bg-color: #0b0e14;
@@ -21,79 +23,77 @@
       color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
-      padding: 15px;
+      padding: 12px;
       box-sizing: border-box;
       user-select: none;
     }
 
-    /* Top Logo Header */
-    .top-header {
+    /* Top Banner / Logo */
+    .top-banner {
+      width: 100%;
+      height: 90px;
+      background: linear-gradient(135deg, #1b170c, #2b2112);
+      border: 2px solid var(--accent-gold);
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin: 10px 0 20px 0;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(229, 172, 64, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
-    .logo-img {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      border: 2px solid var(--accent-gold);
-      box-shadow: 0 0 15px rgba(229, 172, 64, 0.4);
-      object-fit: cover;
-    }
-
-    .logo-title {
-      font-size: 26px;
+    .top-banner h2 {
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 2px;
       background: linear-gradient(135deg, #fce072, #e5ac40);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 0;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
     }
 
-    /* Icon Bar Row */
+    /* Icon Bar Row (3D Gold Look) */
     .icon-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding: 0 5px;
+      padding: 0 2px;
     }
 
     .icon-btn {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #19202c;
-      border: 1px solid #2a3344;
+      background: radial-gradient(circle, #252e3e 0%, #151a23 100%);
+      border: 1.5px solid var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(229, 172, 64, 0.2);
       cursor: pointer;
-      font-size: 20px;
+      font-size: 22px;
     }
 
     /* Main Actions Bar */
     .action-row {
       display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .btn-add {
       width: 65px;
-      height: 60px;
+      height: 56px;
       background: linear-gradient(145deg, #2b2112, #18120a);
       border: 2px solid var(--accent-gold);
-      border-radius: 18px;
+      border-radius: 16px;
       color: var(--accent-gold);
-      font-size: 28px;
+      font-size: 26px;
       font-weight: bold;
       display: flex;
       align-items: center;
@@ -104,67 +104,93 @@
 
     .btn-quick {
       flex: 1;
-      height: 60px;
+      height: 56px;
       background: linear-gradient(135deg, #7b52ff, #5022ed);
       border: none;
-      border-radius: 18px;
+      border-radius: 16px;
       color: white;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
       box-shadow: 0 4px 20px rgba(106, 68, 242, 0.4);
     }
 
     .section-title {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-sub);
       font-weight: 800;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       text-align: left;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     /* Room Cards List */
     .room-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 12px;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
     }
 
-    .room-info-left { text-align: left; }
-    .room-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .room-info-left { text-align: left; flex: 1; }
+    .room-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    
+    .badge-voice { background: rgba(46, 204, 113, 0.15); color: var(--accent-green); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(46, 204, 113, 0.3); }
     .badge-pro { background: var(--accent-gold); color: #000; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
-    .room-name { font-size: 16px; font-weight: bold; color: #fff; }
-    .room-players-count { color: var(--accent-green); font-size: 14px; font-weight: bold; }
-    .room-users-avatars { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-sub); }
-    .arrow-right { color: var(--text-sub); font-size: 18px; }
+    
+    .room-name { font-size: 15px; font-weight: bold; color: #fff; }
+    .room-players-count { color: var(--accent-green); font-size: 13px; font-weight: bold; margin-left: auto; margin-right: 15px; }
+
+    /* Avatars overlapping list */
+    .room-users-avatars {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .avatar-mini {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent-gold);
+      object-fit: cover;
+      background: #222;
+    }
+
+    .creator-text {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-left: 4px;
+    }
+
+    .arrow-right { color: var(--text-sub); font-size: 16px; }
 
     /* Seats Grid */
     .seats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin: 15px 0;
+      gap: 10px;
+      margin: 12px 0;
     }
 
     .seat-box {
       background: var(--card-bg);
       border: 1px dashed var(--card-border);
-      border-radius: 16px;
-      padding: 16px 10px;
+      border-radius: 14px;
+      padding: 14px 8px;
       text-align: center;
-      min-height: 85px;
+      min-height: 80px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -177,11 +203,11 @@
     }
 
     .player-avatar {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       border: 2px solid var(--accent-gold);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       object-fit: cover;
     }
 
@@ -189,30 +215,30 @@
     .roles-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 15px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .role-card {
       background: #19202c;
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
       text-align: center;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
 
     .role-img {
       width: 100%;
-      height: 120px;
+      height: 110px;
       object-fit: cover;
     }
 
     .role-name {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
       color: #fff;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     /* Modals */
@@ -229,10 +255,10 @@
     .modal-content {
       background: #151a23;
       border: 1px solid var(--card-border);
-      padding: 22px;
-      border-radius: 24px;
+      padding: 20px;
+      border-radius: 20px;
       width: 90%;
-      max-width: 380px;
+      max-width: 360px;
       max-height: 85vh;
       overflow-y: auto;
       text-align: left;
@@ -241,13 +267,13 @@
 
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 14px;
-      margin: 8px 0 16px 0;
-      border-radius: 14px;
+      padding: 12px;
+      margin: 8px 0 14px 0;
+      border-radius: 12px;
       border: 1px solid var(--card-border);
       background: #0b0e14;
       color: #fff;
-      font-size: 15px;
+      font-size: 14px;
       box-sizing: border-box;
       outline: none;
     }
@@ -257,12 +283,12 @@
       color: white;
       font-weight: bold;
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
+      font-size: 15px;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -270,16 +296,16 @@
 
   <!-- Asosiy Bosh Sahifa -->
   <div id="home-view">
-    <div class="top-header">
-      <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=200" class="logo-img" alt="Logo">
-      <div class="logo-title">PLAY MAFIA</div>
+    <!-- Yuqori Oltin Banner -->
+    <div class="top-banner">
+      <h2>PLAY MAFIA UZ</h2>
     </div>
 
-    <!-- Ikonkalar paneli -->
+    <!-- Oltin 3D Ikonkalar paneli -->
     <div class="icon-row">
       <div class="icon-btn" title="Reyting">☀️</div>
       <div class="icon-btn" title="Tarix">⏳</div>
-      <div class="icon-btn" id="open-rules-btn" title="O'yin qoidalari">📖</div>
+      <div class="icon-btn" id="open-rules-btn" title="Qoidalar">📖</div>
       <div class="icon-btn" title="Yutuqlar">🏆</div>
       <div class="icon-btn" title="Choyxona">🏕️</div>
       <div class="icon-btn" title="Profil">👑</div>
@@ -293,18 +319,18 @@
 
     <div class="section-title">Ochiq xonalar</div>
     <div id="rooms-container">
-      <p style="color: var(--text-sub); font-size: 14px; text-align: center; margin-top: 30px;">Hozircha ochiq xonalar yo'q...</p>
+      <p style="color: var(--text-sub); font-size: 13px; text-align: center; margin-top: 25px;">Hozircha ochiq xonalar yo'q...</p>
     </div>
   </div>
 
   <!-- O'yin xonasi ko'rinishi -->
   <div id="room-view" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-      <h3 id="room-header-title" style="color: var(--accent-gold); margin: 0;">Xona</h3>
-      <button onclick="location.reload()" style="background: #e74c3c; border: none; color: white; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer;">Chiqish</button>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3 id="room-header-title" style="color: var(--accent-gold); margin: 0; font-size: 17px;">Xona</h3>
+      <button onclick="location.reload()" style="background: #e74c3c; border: none; color: white; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">Chiqish</button>
     </div>
 
-    <div id="my-role-card" style="font-size: 15px; font-weight: bold; color: var(--accent-green); margin-bottom: 12px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 12px; border-radius: 14px;">Rol kutilmoqda...</div>
+    <div id="my-role-card" style="font-size: 14px; font-weight: bold; color: var(--accent-green); margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 10px; border-radius: 12px;">Rol kutilmoqda...</div>
     
     <div class="section-title">O'rindiqlar:</div>
     <div class="seats-grid" id="seats-container"></div>
@@ -316,65 +342,42 @@
   <div class="modal" id="rules-modal">
     <div class="modal-content">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="color: var(--accent-gold); margin: 0;">📖 O'yin rollari</h3>
+        <h3 style="color: var(--accent-gold); margin: 0; font-size: 16px;">📖 Milliy Rollar</h3>
         <button id="close-rules-btn" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;">✕</button>
       </div>
       
       <div class="roles-grid">
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=300" class="role-img" alt="Doktor">
-          <div class="role-name">Doktor</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300" class="role-img" alt="Bezori">
-          <div class="role-name">Bezori</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300" class="role-img" alt="Rais">
-          <div class="role-name">Rais</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300" class="role-img" alt="Qassob">
-          <div class="role-name">Qassob</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300" class="role-img" alt="Mirshab">
-          <div class="role-name">Mirshab</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300" class="role-img" alt="Mafiya">
-          <div class="role-name">Mafiya</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=300" class="role-img" alt="Mafiaboshi">
-          <div class="role-name">Mafiaboshi</div>
-        </div>
-        <div class="role-card">
-          <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=300" class="role-img" alt="Xufya">
-          <div class="role-name">Xufya</div>
-        </div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=300" class="role-img"><div class="role-name">Doktor</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300" class="role-img"><div class="role-name">Bezori</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300" class="role-img"><div class="role-name">Rais</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300" class="role-img"><div class="role-name">Qassob</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300" class="role-img"><div class="role-name">Mirshab</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300" class="role-img"><div class="role-name">Mafiya</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=300" class="role-img"><div class="role-name">Mafiaboshi</div></div>
+        <div class="role-card"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=300" class="role-img"><div class="role-name">Xufya</div></div>
       </div>
     </div>
   </div>
 
-  <!-- Xona ochish va qo'shilish modallari -->
+  <!-- Xona ochish Modal -->
   <div class="modal" id="create-modal">
     <div class="modal-content">
-      <h3 style="color: var(--accent-gold); margin-top:0;">Yangi xona</h3>
+      <h3 style="color: var(--accent-gold); margin-top:0; font-size: 16px;">Yangi xona ochish</h3>
       <input type="text" id="creator-name" placeholder="Ismingiz...">
       <input type="text" id="room-name-input" placeholder="Xona nomi (masalan: 7-Xona)">
       <input type="number" id="max-players-input" value="16" min="3" max="16">
       <button class="btn-main" id="confirm-create">Yaratish</button>
-      <button id="close-create-btn" style="background:none; border:none; color: var(--text-sub); margin-top:15px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
+      <button id="close-create-btn" style="background:none; border:none; color: var(--text-sub); margin-top:12px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
     </div>
   </div>
 
+  <!-- Xonaga qo'shilish Modal -->
   <div class="modal" id="join-modal">
     <div class="modal-content">
-      <h3 style="color: var(--accent-gold); margin-top:0;">Xonaga qo'shilish</h3>
+      <h3 style="color: var(--accent-gold); margin-top:0; font-size: 16px;">Xonaga qo'shilish</h3>
       <input type="text" id="joiner-name" placeholder="Ismingiz...">
       <button class="btn-main" id="confirm-quick-join">Qo'shilish</button>
-      <button id="close-join-btn" style="background:none; border:none; color: var(--text-sub); margin-top:15px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
+      <button id="close-join-btn" style="background:none; border:none; color: var(--text-sub); margin-top:12px; cursor:pointer; width:100%; text-align:center;">Bekor qilish</button>
     </div>
   </div>
 
@@ -395,6 +398,18 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+    // Telegram User ma'lumotlarini olish
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.expand();
+    }
+    const tgUser = tg?.initDataUnsafe?.user;
+    const defaultName = tgUser ? (tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '')) : "O'yinchi";
+    const defaultAvatar = tgUser?.photo_url || "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=100";
+
+    document.getElementById("creator-name").value = defaultName;
+    document.getElementById("joiner-name").value = defaultName;
+
     let currentRoomId = null;
     let myPlayerId = null;
     let isHost = false;
@@ -408,7 +423,6 @@
 
     document.getElementById("open-create-btn").onclick = () => createModal.style.display = "flex";
     document.getElementById("open-rules-btn").onclick = () => rulesModal.style.display = "flex";
-
     document.getElementById("close-create-btn").onclick = () => createModal.style.display = "none";
     document.getElementById("close-join-btn").onclick = () => joinModal.style.display = "none";
     document.getElementById("close-rules-btn").onclick = () => rulesModal.style.display = "none";
@@ -430,11 +444,9 @@
     };
 
     document.getElementById("confirm-create").onclick = () => {
-      const name = document.getElementById("creator-name").value.trim();
+      const name = document.getElementById("creator-name").value.trim() || defaultName;
       const roomTitle = document.getElementById("room-name-input").value.trim() || "Xona";
       const maxPlayers = parseInt(document.getElementById("max-players-input").value) || 16;
-
-      if (!name) return alert("Ismingizni kiriting!");
 
       currentRoomId = Math.floor(1000 + Math.random() * 9000);
       isHost = true;
@@ -449,15 +461,14 @@
 
       const playerRef = push(ref(database, 'rooms/' + currentRoomId + '/players'));
       myPlayerId = playerRef.key;
-      set(playerRef, { name: name, isHost: true, role: "Kutilmoqda..." });
+      set(playerRef, { name: name, avatar: defaultAvatar, isHost: true, role: "Kutilmoqda..." });
 
       createModal.style.display = "none";
       showRoom();
     };
 
     document.getElementById("confirm-quick-join").onclick = async () => {
-      const name = document.getElementById("joiner-name").value.trim();
-      if (!name) return alert("Ismingizni kiriting!");
+      const name = document.getElementById("joiner-name").value.trim() || defaultName;
       if (!selectedRoomToJoin) return alert("Xona topilmadi!");
 
       currentRoomId = selectedRoomToJoin;
@@ -465,7 +476,7 @@
 
       const playerRef = push(ref(database, 'rooms/' + currentRoomId + '/players'));
       myPlayerId = playerRef.key;
-      set(playerRef, { name: name, isHost: false, role: "Kutilmoqda..." });
+      set(playerRef, { name: name, avatar: defaultAvatar, isHost: false, role: "Kutilmoqda..." });
 
       joinModal.style.display = "none";
       showRoom();
@@ -499,9 +510,9 @@
             const [pKey, pVal] = playersList[i];
             seat.classList.add("occupied");
             seat.innerHTML = `
-              <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=100" class="player-avatar" alt="Avatar">
-              <div style="font-weight:bold; font-size:14px; color:#fff;">${pVal.name}</div>
-              <div style="font-size:11px; color:${pVal.isHost ? 'var(--accent-gold)' : 'var(--accent-green)'}; margin-top:2px;">${pVal.isHost ? '👑 Xona egasi' : 'O‘yinchi'}</div>
+              <img src="${pVal.avatar || defaultAvatar}" class="player-avatar" alt="Avatar">
+              <div style="font-weight:bold; font-size:13px; color:#fff;">${pVal.name}</div>
+              <div style="font-size:10px; color:${pVal.isHost ? 'var(--accent-gold)' : 'var(--accent-green)'}; margin-top:2px;">${pVal.isHost ? '👑 Xona egasi' : 'O‘yinchi'}</div>
             `;
 
             if (pKey === myPlayerId && pVal.role && pVal.role !== "Kutilmoqda...") {
@@ -509,8 +520,8 @@
             }
           } else {
             seat.innerHTML = `
-              <div style="font-size: 20px; color: #555;">+</div>
-              <div style="font-size: 11px; color: #666; margin-top:2px;">Bo'sh joy</div>
+              <div style="font-size: 18px; color: #555;">+</div>
+              <div style="font-size: 10px; color: #666; margin-top:2px;">Bo'sh joy</div>
             `;
           }
           seatsContainer.appendChild(seat);
@@ -523,7 +534,7 @@
       container.innerHTML = "";
 
       if (!snapshot.exists()) {
-        container.innerHTML = '<p style="color: var(--text-sub); font-size: 14px; text-align: center; margin-top: 30px;">Hozircha ochiq xonalar yo\'q...</p>';
+        container.innerHTML = '<p style="color: var(--text-sub); font-size: 13px; text-align: center; margin-top: 25px;">Hozircha ochiq xonalar yo\'q...</p>';
         return;
       }
 
@@ -532,20 +543,29 @@
         const rData = child.val();
 
         if (rData.status === "waiting") {
-          const playersCount = rData.players ? Object.keys(rData.players).length : 0;
+          const playersObj = rData.players || {};
+          const playersList = Object.values(playersObj);
+          const playersCount = playersList.length;
           const maxPlayers = rData.maxPlayers || 16;
           
+          let avatarsHTML = "";
+          playersList.slice(0, 4).forEach(p => {
+            avatarsHTML += `<img src="${p.avatar || defaultAvatar}" class="avatar-mini">`;
+          });
+
           const card = document.createElement("div");
           card.className = "room-card";
           card.innerHTML = `
             <div class="room-info-left">
               <div class="room-header">
+                <span class="badge-voice">🎙 Ovozli</span>
                 <span class="badge-pro">Pro</span>
                 <span class="room-name">${rData.roomName || 'Xona'}</span>
                 <span class="room-players-count">${playersCount}/${maxPlayers}</span>
               </div>
               <div class="room-users-avatars">
-                <span>👤 Yaratuvchi: ${rData.createdBy}</span>
+                ${avatarsHTML}
+                <span class="creator-text">${rData.createdBy}</span>
               </div>
             </div>
             <div class="arrow-right">❯</div>
