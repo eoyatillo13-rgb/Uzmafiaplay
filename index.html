@@ -1,34 +1,140 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UzMafiaplay</title>
-<style>
-body {
-  background: #151515;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 20px;
-}
-h1 { color: #e53935; }
-button {
-  background: #e53935;
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  margin: 8px;
-  border-radius: 8px;
-  font-size: 17px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UzMafiaplay</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #ff4d4d;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2b2b2b;
+      color: #fff;
+      font-size: 16px;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #b20710;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background: #333;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
-<h1>UzMafiaplay</h1>
-<p>O'zbekcha Mafia o'yiniga xush kelibsiz!</p>
-<button onclick="alert('Mafia o‘yini tez orada boshlanadi!')">
-O‘yinni boshlash
-</button>
+
+  <h1>UzMafiaplay</h1>
+  <p>O'zbekcha Mafia o'yiniga xush kelibsiz!</p>
+
+  <div class="card" id="auth-box">
+    <h3>Ismingizni kiriting</h3>
+    <input type="text" id="username" placeholder="Ismingiz...">
+    <br>
+    <button id="create-room-btn">Xona yaratish</button>
+  </div>
+
+  <div class="card" id="room-box" style="display: none;">
+    <h3 id="room-title">Xona kodi: -</h3>
+    <h4>O'yinchilar ro'yxati:</h4>
+    <ul id="players-list"></ul>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCWlfG8IlwFQuSm96CPQY4DmfVZJvg606w",
+      authDomain: "uzmafiaplay-fbe1b.firebaseapp.com",
+      databaseURL: "https://uzmafiaplay-fbe1b-default-rtdb.firebaseio.com",
+      projectId: "uzmafiaplay-fbe1b",
+      storageBucket: "uzmafiaplay-fbe1b.firebasestorage.app",
+      messagingSenderId: "897774965825",
+      appId: "1:897774965825:web:90c821fbcc7972120622c0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const createBtn = document.getElementById("create-room-btn");
+    const usernameInput = document.getElementById("username");
+    const authBox = document.getElementById("auth-box");
+    const roomBox = document.getElementById("room-box");
+    const roomTitle = document.getElementById("room-title");
+    const playersList = document.getElementById("players-list");
+
+    createBtn.addEventListener("click", () => {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert("Iltimos, ismingizni kiriting!");
+        return;
+      }
+
+      const roomId = Math.floor(1000 + Math.random() * 9000);
+      const roomRef = ref(database, 'rooms/' + roomId);
+
+      set(roomRef, {
+        createdBy: username,
+        createdAt: Date.now()
+      });
+
+      const playerRef = push(ref(database, 'rooms/' + roomId + '/players'));
+      set(playerRef, {
+        name: username
+      });
+
+      authBox.style.display = "none";
+      roomBox.style.display = "block";
+      roomTitle.innerText = "Xona kodi: " + roomId;
+
+      onValue(ref(database, 'rooms/' + roomId + '/players'), (snapshot) => {
+        playersList.innerHTML = "";
+        snapshot.forEach((childSnapshot) => {
+          const player = childSnapshot.val();
+          const li = document.createElement("li");
+          li.innerText = player.name;
+          playersList.appendChild(li);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
