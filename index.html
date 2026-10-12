@@ -13,9 +13,7 @@
       padding: 20px;
       margin: 0;
     }
-    h1 {
-      color: #ff4d4d;
-    }
+    h1 { color: #ff4d4d; }
     .card {
       background: #1e1e1e;
       padding: 20px;
@@ -44,18 +42,19 @@
       cursor: pointer;
       margin: 5px;
     }
-    button:hover {
-      background-color: #b20710;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
+    button:hover { background-color: #b20710; }
+    ul { list-style-type: none; padding: 0; }
     li {
       background: #333;
       margin: 5px 0;
       padding: 8px;
       border-radius: 4px;
+    }
+    .role-badge {
+      font-weight: bold;
+      color: #ffcc00;
+      font-size: 18px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -73,13 +72,15 @@
 
   <div class="card" id="room-box" style="display: none;">
     <h3 id="room-title">Xona kodi: -</h3>
+    <div id="my-role-box" class="role-badge"></div>
     <h4>O'yinchilar ro'yxati:</h4>
     <ul id="players-list"></ul>
+    <button id="start-game-btn" style="display: none;">O'yinni boshlash</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, set, onValue, push, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCWlfG8IlwFQuSm96CPQY4DmfVZJvg606w",
@@ -94,12 +95,17 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+    let currentRoomId = null;
+    let myPlayerId = null;
+
     const createBtn = document.getElementById("create-room-btn");
+    const startBtn = document.getElementById("start-game-btn");
     const usernameInput = document.getElementById("username");
     const authBox = document.getElementById("auth-box");
     const roomBox = document.getElementById("room-box");
     const roomTitle = document.getElementById("room-title");
     const playersList = document.getElementById("players-list");
+    const myRoleBox = document.getElementById("my-role-box");
 
     createBtn.addEventListener("click", () => {
       const username = usernameInput.value.trim();
@@ -108,32 +114,79 @@
         return;
       }
 
-      const roomId = Math.floor(1000 + Math.random() * 9000);
-      const roomRef = ref(database, 'rooms/' + roomId);
+      currentRoomId = Math.floor(1000 + Math.random() * 9000);
 
+      const roomRef = ref(database, 'rooms/' + currentRoomId);
       set(roomRef, {
         createdBy: username,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        status: "waiting"
       });
 
-      const playerRef = push(ref(database, 'rooms/' + roomId + '/players'));
+      const playerRef = push(ref(database, 'rooms/' + currentRoomId + '/players'));
+      myPlayerId = playerRef.key;
       set(playerRef, {
-        name: username
+        name: username,
+        role: "Kutilmoqda..."
       });
 
       authBox.style.display = "none";
       roomBox.style.display = "block";
-      roomTitle.innerText = "Xona kodi: " + roomId;
+      startBtn.style.display = "inline-block";
+      roomTitle.innerText = "Xona kodi: " + currentRoomId;
 
-      onValue(ref(database, 'rooms/' + roomId + '/players'), (snapshot) => {
+      listenToRoom();
+    });
+
+    function listenToRoom() {
+      onValue(ref(database, 'rooms/' + currentRoomId + '/players'), (snapshot) => {
         playersList.innerHTML = "";
         snapshot.forEach((childSnapshot) => {
           const player = childSnapshot.val();
+          const pKey = childSnapshot.key;
           const li = document.createElement("li");
           li.innerText = player.name;
           playersList.appendChild(li);
+
+          if (pKey === myPlayerId && player.role) {
+            if (player.role !== "Kutilmoqda...") {
+              myRoleBox.innerText = "Sizning rolingiz: " + player.role;
+            }
+          }
         });
       });
+    }
+
+    startBtn.addEventListener("click", async () => {
+      const playersRef = ref(database, 'rooms/' + currentRoomId + '/players');
+      const snapshot = await get(playersRef);
+      if (!snapshot.exists()) return;
+
+      const players = [];
+      snapshot.forEach((child) => {
+        players.push({ key: child.key, ...child.val() });
+      });
+
+      if (players.length < 3) {
+        alert("O'yinni boshlash uchun kamida 3 ta o'yinchi kerak!");
+        return;
+      }
+
+      const roles = ["Mafiya", "Shifokor", "Tinch aholi", "Komissar", "Tinch aholi"];
+      for (let i = players.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [players[i], players[j]] = [players[j], players[i]];
+      }
+
+      const updates = {};
+      players.forEach((p, index) => {
+        const assignedRole = roles[index] || "Tinch aholi";
+        updates['rooms/' + currentRoomId + '/players/' + p.key + '/role'] = assignedRole;
+      });
+
+      updates['rooms/' + currentRoomId + '/status'] = "started";
+      update(ref(database), updates);
+      alert("O'yin boshlandi! Rolingiz ekranda ko'rsatildi.");
     });
   </script>
 </body>
