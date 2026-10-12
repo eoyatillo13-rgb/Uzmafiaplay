@@ -312,7 +312,7 @@
   <div id="room-view" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
       <h3 id="room-header-title" style="color: var(--accent-gold); margin: 0; font-size: 17px;">Xona</h3>
-      <button onclick="location.reload()" style="background: #e74c3c; border: none; color: white; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">Chiqish</button>
+      <button id="leave-room-btn" style="background: #e74c3c; border: none; color: white; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">Chiqish</button>
     </div>
 
     <div id="my-role-card" style="font-size: 14px; font-weight: bold; color: var(--accent-green); margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--card-border); padding: 10px; border-radius: 12px;">Rol kutilmoqda...</div>
@@ -427,8 +427,9 @@
       let foundRoom = null;
       snapshot.forEach((child) => {
         const rData = child.val();
-        const pCount = rData.players ? Object.keys(rData.players).length : 0;
-        if (rData.status === "waiting" && pCount < (rData.maxPlayers || 16) && !foundRoom) {
+        const players = rData.players || {};
+        const pKeys = Object.keys(players);
+        if (rData.status === "waiting" && pKeys.length > 0 && pKeys.length < (rData.maxPlayers || 16) && !foundRoom) {
           foundRoom = child.key;
         }
       });
@@ -447,7 +448,8 @@
       currentRoomId = Math.floor(1000 + Math.random() * 9000);
       isHost = true;
 
-      set(ref(database, 'rooms/' + currentRoomId), {
+      const roomRef = ref(database, 'rooms/' + currentRoomId);
+      set(roomRef, {
         roomName: roomTitle,
         createdBy: name,
         roomType: roomType,
@@ -455,6 +457,8 @@
         status: "waiting",
         createdAt: Date.now()
       });
+      // Xona egasi chiqib ketsa yoki tarmoq uzilsa, xona to'liq o'chib ketadi
+      onDisconnect(roomRef).remove();
 
       const playerRef = push(ref(database, 'rooms/' + currentRoomId + '/players'));
       myPlayerId = playerRef.key;
@@ -473,7 +477,8 @@
       if (!roomSnap.exists()) return alert("Xona mavjud emas!");
       
       const rData = roomSnap.val();
-      const pCount = rData.players ? Object.keys(rData.players).length : 0;
+      const players = rData.players || {};
+      const pCount = Object.keys(players).length;
       if (pCount >= (rData.maxPlayers || 16)) return alert("Xona to'lib bo'lgan!");
 
       currentRoomId = selectedRoomToJoin;
@@ -486,6 +491,21 @@
 
       joinModal.style.display = "none";
       showRoom();
+    };
+
+    document.getElementById("leave-room-btn").onclick = async () => {
+      if (currentRoomId && myPlayerId) {
+        await remove(ref(database, 'rooms/' + currentRoomId + '/players/' + myPlayerId));
+        // Agar xonada odam qolmasa, xonani o'chirish
+        const roomSnap = await get(ref(database, 'rooms/' + currentRoomId));
+        if (roomSnap.exists()) {
+          const rData = roomSnap.val();
+          if (!rData.players || Object.keys(rData.players).length === 0) {
+            await remove(ref(database, 'rooms/' + currentRoomId));
+          }
+        }
+      }
+      location.reload();
     };
 
     const toggleMicBtn = document.getElementById("toggle-mic-btn");
@@ -507,7 +527,11 @@
 
     function listenRoom() {
       onValue(ref(database, 'rooms/' + currentRoomId), (snapshot) => {
-        if (!snapshot.exists()) return;
+        if (!snapshot.exists()) {
+          alert("Xona yopildi yoki o'chirildi!");
+          location.reload();
+          return;
+        }
         const roomData = snapshot.val();
         document.getElementById("room-header-title").innerText = roomData.roomName + " (" + currentRoomId + ")";
 
@@ -563,14 +587,19 @@
         return;
       }
 
+      let activeRoomsCount = 0;
+
       snapshot.forEach((child) => {
         const rId = child.key;
         const rData = child.val();
 
-        if (rData.status === "waiting") {
-          const playersObj = rData.players || {};
-          const playersList = Object.values(playersObj);
-          const playersCount = playersList.length;
+        // Faqat ichida real o'yinchilari bor va kutilayotgan xonalarni ko'rsatamiz
+        const playersObj = rData.players || {};
+        const playersList = Object.values(playersObj);
+        const playersCount = playersList.length;
+
+        if (rData.status === "waiting" && playersCount > 0) {
+          activeRoomsCount++;
           const maxPlayers = rData.maxPlayers || 16;
           
           let avatarsHTML = "";
@@ -604,6 +633,10 @@
           container.appendChild(card);
         }
       });
+
+      if (activeRoomsCount === 0) {
+        container.innerHTML = '<p style="color: var(--text-sub); font-size: 13px; text-align: center; margin-top: 25px;">Hozircha ochiq xonalar yo\'q...</p>';
+      }
     });
 
     document.getElementById("start-game-btn").onclick = async () => {
