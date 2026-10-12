@@ -13,7 +13,6 @@
       padding: 15px;
       text-align: center;
     }
-    /* Top Logo Section */
     .top-header {
       display: flex;
       align-items: center;
@@ -38,10 +37,7 @@
       font-weight: 900;
       letter-spacing: 2px;
       color: #f1c40f;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
-
-    /* Icon Row */
     .icon-row {
       display: flex;
       justify-content: space-between;
@@ -50,7 +46,6 @@
       padding: 10px 15px;
       border-radius: 16px;
       margin-bottom: 20px;
-      overflow-x: auto;
       gap: 10px;
     }
     .icon-item {
@@ -62,24 +57,8 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
       border: 1px solid #2c2d3c;
     }
-    .icon-badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #e74c3c;
-      color: white;
-      font-size: 10px;
-      padding: 2px 5px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    /* Action Buttons Row */
     .action-row {
       display: flex;
       gap: 10px;
@@ -110,23 +89,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(124, 77, 255, 0.4);
     }
-    .btn-qr {
-      background: #1f2029;
-      border: 1px solid #2c2d3c;
-      border-radius: 16px;
-      width: 55px;
-      height: 55px;
-      font-size: 22px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Section Title */
     .section-header {
       text-align: left;
       font-size: 13px;
@@ -136,8 +99,6 @@
       margin-bottom: 12px;
       text-transform: uppercase;
     }
-
-    /* Room Cards */
     .room-card {
       background: #15161d;
       border: 1px solid #22232f;
@@ -149,7 +110,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: 0.2s;
     }
     .room-card:hover { border-color: #e67e22; }
     .room-title-text {
@@ -162,12 +122,6 @@
       font-size: 13px;
       color: #2ecc71;
     }
-    .room-arrow {
-      color: #7f8c8d;
-      font-size: 18px;
-    }
-
-    /* Modals */
     .modal {
       display: none;
       position: fixed;
@@ -216,37 +170,32 @@
 
   <!-- Asosiy ekran -->
   <div id="home-view">
-    <!-- Logotip qismi -->
     <div class="top-header">
       <div class="logo-circle">🕵️‍♂️</div>
       <div class="logo-title">PLAY MAFIA</div>
     </div>
 
-    <!-- Ikonkalar paneli -->
     <div class="icon-row">
-      <div class="icon-item" title="Reyting">☀️</div>
-      <div class="icon-item" title="Tarix">⏳</div>
-      <div class="icon-item" title="Qoidalar">📜</div>
-      <div class="icon-item" title="Yutuqlar">🏆</div>
-      <div class="icon-item" title="Choyxona">🏕️<span class="icon-badge">1</span></div>
-      <div class="icon-item" title="Profil">👑</div>
+      <div class="icon-item">☀️</div>
+      <div class="icon-item">⏳</div>
+      <div class="icon-item">📜</div>
+      <div class="icon-item">🏆</div>
+      <div class="icon-item">🏕️</div>
+      <div class="icon-item">👑</div>
     </div>
 
-    <!-- Asosiy tugmalar (Xona ochish +, Tezkor qo'shilish, QR) -->
     <div class="action-row">
       <button class="btn-create" id="open-create-modal" title="Xona ochish">➕</button>
       <button class="btn-quick" id="quick-join-btn">⚡ Tezkor qo'shilish</button>
-      <button class="btn-qr" id="qr-btn" title="Kod kiritish">🔲</button>
     </div>
 
-    <!-- Ochiq xonalar ro'yxati -->
     <div class="section-header">Ochiq xonalar</div>
     <div id="rooms-container">
       <p style="color: #555; font-size: 14px; margin-top: 20px;">Hozircha ochiq xonalar yo'q...</p>
     </div>
   </div>
 
-  <!-- O'yin xonasi ichki ko'rinishi -->
+  <!-- O'yin xonasi -->
   <div id="room-view" style="display: none;">
     <h2 id="room-header-title" style="color: #f1c40f;">Xona kodi: -</h2>
     <div id="my-role-card" style="font-size: 18px; font-weight: bold; color: #2ecc71; margin: 20px 0;"></div>
@@ -258,7 +207,7 @@
     <button onclick="location.reload()" class="btn-main" style="background: #e74c3c; color: white; margin-top: 10px;">Xonadan chiqish</button>
   </div>
 
-  <!-- Xona ochish oynasi (Modal) -->
+  <!-- Xona ochish uchun ism kiritish -->
   <div class="modal" id="create-modal">
     <div class="modal-content">
       <h3 style="color: #f1c40f; margin-top:0;">Xona yaratish</h3>
@@ -268,13 +217,12 @@
     </div>
   </div>
 
-  <!-- Xonaga qo'shilish / Tezkor qo'shilish oynasi (Modal) -->
+  <!-- Tezkor qo'shilish uchun ism kiritish -->
   <div class="modal" id="join-modal">
     <div class="modal-content">
-      <h3 style="color: #7f8c8d; margin-top:0;">Xonaga qo'shilish</h3>
-      <input type="text" id="joiner-name" placeholder="Ismingizni kiriting...">
-      <input type="number" id="room-code-input" placeholder="Xona kodi (masalan: 4321)">
-      <button class="btn-main" id="confirm-join">Qo'shilish</button>
+      <h3 style="color: #f1c40f; margin-top:0;">Ismingizni kiriting</h3>
+      <input type="text" id="joiner-name" placeholder="Ismingiz...">
+      <button class="btn-main" id="confirm-quick-join">Davom etish</button>
       <button onclick="closeAllModals()" style="background:none; border:none; color:#7f8c8d; margin-top:15px; cursor:pointer;">Bekor qilish</button>
     </div>
   </div>
@@ -299,6 +247,7 @@
     let currentRoomId = null;
     let myPlayerId = null;
     let isHost = false;
+    let selectedRoomToJoin = null;
 
     const homeView = document.getElementById("home-view");
     const roomView = document.getElementById("room-view");
@@ -306,8 +255,23 @@
     const joinModal = document.getElementById("join-modal");
 
     document.getElementById("open-create-modal").onclick = () => createModal.style.display = "flex";
-    document.getElementById("quick-join-btn").onclick = () => joinModal.style.display = "flex";
-    document.getElementById("qr-btn").onclick = () => joinModal.style.display = "flex";
+    
+    // Tezkor qo'shilish tugmasi (birinchi ochilgan xonaga kirish)
+    document.getElementById("quick-join-btn").onclick = async () => {
+      const snapshot = await get(ref(database, 'rooms'));
+      if (!snapshot.exists()) return alert("Hozircha ochiq xonalar yo'q!");
+      
+      let foundRoom = null;
+      snapshot.forEach((child) => {
+        if (child.val().status === "waiting" && !foundRoom) {
+          foundRoom = child.key;
+        }
+      });
+
+      if (!foundRoom) return alert("Hozircha ochiq xonalar yo'q!");
+      selectedRoomToJoin = foundRoom;
+      joinModal.style.display = "flex";
+    };
 
     window.closeAllModals = () => {
       createModal.style.display = "none";
@@ -336,20 +300,16 @@
       showRoom();
     };
 
-    // Xonaga ulanish
-    document.getElementById("confirm-join").onclick = async () => {
+    // Ro'yxatdan xonani bosganda yoki tezkor qo'shilganda to'g'ridan-to'g'ri kirish
+    document.getElementById("confirm-quick-join").onclick = async () => {
       const name = document.getElementById("joiner-name").value.trim();
-      const code = document.getElementById("room-code-input").value.trim();
+      if (!name) return alert("Iltimos, ismingizni kiriting!");
+      if (!selectedRoomToJoin) return alert("Xona topilmadi!");
 
-      if (!name || !code) return alert("Barcha maydonlarni to'ldiring!");
-
-      const snapshot = await get(ref(database, 'rooms/' + code));
-      if (!snapshot.exists()) return alert("Bunday xona topilmadi!");
-
-      currentRoomId = code;
+      currentRoomId = selectedRoomToJoin;
       isHost = false;
 
-      const playerRef = push(ref(database, 'rooms/' + code + '/players'));
+      const playerRef = push(ref(database, 'rooms/' + currentRoomId + '/players'));
       myPlayerId = playerRef.key;
       set(playerRef, { name: name, isHost: false, role: "Kutilmoqda..." });
 
@@ -380,6 +340,7 @@
           li.innerHTML = `${p.name} ${p.isHost ? '👑 <span style="color:#f1c40f; font-size:12px;">Xona egasi</span>' : ''}`;
           ul.appendChild(li);
 
+          // Rol bir marta yozilsa, qayta o'zgarmasligi uchun bazadagi qiymatni qulflaymiz
           if (child.key === myPlayerId && p.role && p.role !== "Kutilmoqda...") {
             document.getElementById("my-role-card").innerText = "Sizning rolingiz: " + p.role;
           }
@@ -387,7 +348,7 @@
       });
     }
 
-    // Ochiq xonalar ro'yxatini real vaqtda chiqarish
+    // Ochiq xonalar ro'yxati (ustiga bossa kod kiritmasdan kiradi)
     onValue(ref(database, 'rooms'), (snapshot) => {
       const container = document.getElementById("rooms-container");
       container.innerHTML = "";
@@ -406,27 +367,35 @@
           card.className = "room-card";
           card.innerHTML = `
             <div>
-              <div class="room-title-text">Xona #${rId}</div>
-              <div class="room-details">Yaratuvchi: ${rData.createdBy}</div>
+              <div class="room-title-text">${rData.createdBy} ning xonasi</div>
+              <div class="room-details">Qo'shilish uchun bosing ➔</div>
             </div>
-            <div class="room-arrow">➔</div>
+            <div style="color: #e67e22; font-size: 14px; font-weight: bold;">Kirish</div>
           `;
           card.onclick = () => {
-            document.getElementById("room-code-input").value = rId;
-            joinModal.style.display = "flex";
+            selectedRoomToJoin = rId;
+            document.getElementById("join-modal").style.display = "flex";
           };
           container.appendChild(card);
         }
       });
     });
 
-    // O'yinni boshlash
+    // O'yinni boshlash (faqat bir marta rol taqsimlaydi va bazada saqlaydi)
     document.getElementById("start-game-btn").onclick = async () => {
-      const snapshot = await get(ref(database, 'rooms/' + currentRoomId + '/players'));
+      const roomRef = ref(database, 'rooms/' + currentRoomId);
+      const snapshot = await get(roomRef);
       if (!snapshot.exists()) return;
 
+      const roomData = snapshot.val();
+      // Agar o'yin allaqachon boshlangan bo'lsa, rollarni qayta aralashtirmaymiz!
+      if (roomData.status === "started") return;
+
+      const playersSnap = await get(ref(database, 'rooms/' + currentRoomId + '/players'));
+      if (!playersSnap.exists()) return;
+
       const players = [];
-      snapshot.forEach((child) => players.push({ key: child.key, ...child.val() }));
+      playersSnap.forEach((child) => players.push({ key: child.key, ...child.val() }));
 
       if (players.length < 3) return alert("O'yin uchun kamida 3 ta o'yinchi kerak!");
 
